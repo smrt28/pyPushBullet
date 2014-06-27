@@ -40,6 +40,12 @@ class PushBullet():
 
         return self._request("GET", HOST + "/devices")["devices"]
 
+    def createDevice(self, name):
+        data = {"type": 'stream',
+                "nickname": name }
+        return self._request("POST", HOST + "/devices", data)
+
+
     def deleteDevice(self, device_iden):
         """ Delete a device
             https://docs.pushbullet.com/v2/devices
