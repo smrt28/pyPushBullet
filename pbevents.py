@@ -1,7 +1,7 @@
 from pbkey import KEY
 from pushbullet import PushBullet
 
-DEVICE = 'smrt28'
+MODEL= 'chaotic'
 HIST_FILE='/home/smrt/.pb_history'
 
 
@@ -17,8 +17,13 @@ class PBEventHandler:
         self._sync_maxmod(self._get_modified())
 
         devices = self.pb.getDevices()
+
         for device in devices:
-            if device['nickname'] == DEVICE:
+            if device['active']:
+                print 'DEVICE: ' + str(device)
+
+        for device in devices:
+            if device.get('model', None) == MODEL:
                 self.iden = device['iden']
                 break
 
@@ -51,7 +56,7 @@ class PBEventHandler:
                 self._sync_maxmod()
 
                 if self.iden != None and\
-                        push['target_device_iden'] != self.iden: continue
+                        push.get('target_device_iden', "") != self.iden: continue
                 try:
                     callback(push)
                 except:
@@ -68,7 +73,10 @@ class PBEventHandler:
 
 
 def event(data):
-    print data
+    print "EVENT: " + str(data)
+
+#pb = PushBullet(KEY)
+#pb.createDevice("smrt28")
 
 pb = PBEventHandler()
 pb.run(event)

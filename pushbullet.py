@@ -40,9 +40,11 @@ class PushBullet():
 
         return self._request("GET", HOST + "/devices")["devices"]
 
-    def createDevice(self, name):
-        data = {"type": 'stream',
-                "nickname": name }
+    def createDevice(self, name, t = 'stream'):
+        data = {"type": 'windows',
+                'app_version' : 1,
+                'nickname': name,
+                'model': 'chaotic'}
         return self._request("POST", HOST + "/devices", data)
 
 
@@ -225,5 +227,4 @@ class PushBullet():
         while 1:
             data = ws.recv()
             data = json.loads(data)
-            if data["type"] != "nop":
-                callback(data)
+            callback(data)
